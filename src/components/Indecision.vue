@@ -2,17 +2,29 @@
   <img src="http://via.placeholder.com/250" alt="bg" />
   <div class="bg-darck"></div>
   <div class="indecision-container">
-    <input type="text" placeholder="Hazme una pregunta" />
+    <input v-model="question" type="text" placeholder="Hazme una pregunta" />
     <p>Recuerda terminar con un signo de interrogacion (?)</p>
     <div>
-      <h2>Sere millonario?</h2>
+      <h2>{{ question }}</h2>
       <h1>Si,No, ... pensando</h1>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { watch } from '@vue/runtime-core';
+export default {
+    data() {
+        return {
+            question: null
+        }
+    },
+        watch: {
+            question(value, oldValue) {
+                if(!value.includes('?')) return;
+            }
+        }
+    }
 </script>
 
 <style>
