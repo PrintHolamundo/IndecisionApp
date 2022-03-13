@@ -1,30 +1,45 @@
 <template>
-  <img src="http://via.placeholder.com/250" alt="bg" />
-  <div class="bg-darck"></div>
+  <img v-if="img" :src="img" alt="bg" />
+  <div class="bg-dark"></div>
   <div class="indecision-container">
     <input v-model="question" type="text" placeholder="Hazme una pregunta" />
     <p>Recuerda terminar con un signo de interrogacion (?)</p>
-    <div>
+    <div v-if="isValidQuestion">
       <h2>{{ question }}</h2>
-      <h1>Si,No, ... pensando</h1>
+      <h1>{{ answer }}</h1>
     </div>
   </div>
 </template>
 
 <script>
-import { watch } from '@vue/runtime-core';
 export default {
-    data() {
-        return {
-            question: null
-        }
+  data() {
+    return {
+      question: null,
+      answer: null,
+      img: null,
+      isValidQuestion: false,
+    };
+  },
+  watch: {
+    question(value, oldValue) {
+      this.isValidQuestion = false;
+      if (!value.includes("?")) return;
+      this.isValidQuestion = true;
+      this.getAnswer();
     },
-        watch: {
-            question(value, oldValue) {
-                if(!value.includes('?')) return;
-            }
-        }
-    }
+  },
+  methods: {
+    async getAnswer() {
+      this.answer = "Pensando...";
+      const { answer, image } = await fetch("https://yesno.wtf/api").then((r) =>
+        r.json()
+      );
+      this.answer = answer === "yeah" ? "Si" : "No";
+      this.img = image;
+    },
+  },
+};
 </script>
 
 <style>
