@@ -1,6 +1,7 @@
 <template>
   <h2>{{ customTitles }}</h2>
   <p>{{ counter }} <sup>2</sup> = {{ counter * counter }}</p>
+  <p data-testid="counter">{{ counter }}</p>
   <div>
     <button @click="counter--">-1</button>
     <button @click="counter++">+1</button>
@@ -14,7 +15,7 @@ export default {
     start: {
       type: Number,
       required: true,
-      default: 10,
+      default: 100,
       validator(value) {
         return value >= 0;
       },
