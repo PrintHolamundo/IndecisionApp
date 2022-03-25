@@ -3,20 +3,21 @@ import Indecision from "@/components/Indecision.vue";
 
 describe("Indecision component",() => {
         let wrapper;
+        let clgSpy;
         beforeEach(() => {
             wrapper = shallowMount(Indecision);
+            clgSpy = jest.spyOn(console, "log");
         })
 
         test("debe de hacer match con el snapshot", () => {
             expect(wrapper.html()).toMatchSnapshot();
         })
 
-        test("Escribir en el input no debe de disparar nada (console.log)", () => {
-            // const input = wrapper.find("input");
-            // const spy = jest.spyOn(console, "log");
-            // input.setValue("Hola");
-            // expect(spy).not.toHaveBeenCalled();
-
+        test("Escribir en el input no debe de disparar nada (console.log)", async() => {
+            const input = wrapper.find("input");
+            await input.setValue("Hola Mundo");
+            expect(clgSpy).toHaveBeenCalledTimes(1);
+           
         })
 
         test("Escribir el simbolo de '?' debe de disparar  el fetch", () => {
