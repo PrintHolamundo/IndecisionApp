@@ -4,9 +4,11 @@ import Indecision from "@/components/Indecision.vue";
 describe("Indecision component", () => {
     let wrapper;
     let clgSpy;
+    global.fetch = jest.fn();
     beforeEach(() => {
         wrapper = shallowMount(Indecision);
         clgSpy = jest.spyOn(console, "log");
+        jest.clearAllMocks();
     })
 
     test("debe de hacer match con el snapshot", () => {
@@ -22,12 +24,13 @@ describe("Indecision component", () => {
 
     })
 
-    test("Escribir el simbolo de '?' debe de disparar  el fetch", () => {
-        // const input = wrapper.find("input");
-        // const spy = jest.spyOn(wrapper.vm, "fetchData");
-        // input.setValue("?");
-        // expect(spy).toHaveBeenCalled();
-
+    test("Escribir el simbolo de '?' debe de disparar  el getAnswer", async () => {
+        
+        const getAnswerSpy = jest.spyOn(wrapper.vm, "getAnswer");
+        const input = wrapper.find("input");
+        await input.setValue("?");
+        expect(clgSpy).toHaveBeenCalledTimes(1);
+        expect(getAnswerSpy).toHaveBeenCalled();
     })
 
     test("pruebas en getAwswer ", () => {
