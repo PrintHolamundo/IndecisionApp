@@ -47,10 +47,13 @@ describe("Indecision component", () => {
     })
 
 
-    test("pruebas en getAwswer - Fallo en el API ", () => {
-        // const spy = jest.spyOn(wrapper.vm, "getAnswer");
-        // wrapper.vm.getAnswer();
-        // expect(spy).toHaveBeenCalled();
+    test("pruebas en getAwswer - Fallo en el API ", async () => {
+        //TODO: fallo en el API
+        fetch.mockImplementation(() => Promise.reject('API is down'));
+        await wrapper.vm.getAnswer();
+        const img = wrapper.find("img");
+        expect(img.exists()).toBeFalsy();
+        expect(wrapper.vm.answer).toBe('No se puede cargar del API');
 
     })
 
