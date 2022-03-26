@@ -4,7 +4,13 @@ import Indecision from "@/components/Indecision.vue";
 describe("Indecision component", () => {
     let wrapper;
     let clgSpy;
-    global.fetch = jest.fn();
+    global.fetch = jest.fn(() => Promise.resolve({
+        json: () => Promise.resolve({
+            awnser: 'yes',
+            forced: false,
+            image: 'https://yesno.wtf/assets/yes/2.gif',
+        })
+    }));
     beforeEach(() => {
         wrapper = shallowMount(Indecision);
         clgSpy = jest.spyOn(console, "log");
@@ -25,7 +31,7 @@ describe("Indecision component", () => {
     })
 
     test("Escribir el simbolo de '?' debe de disparar  el getAnswer", async () => {
-        
+
         const getAnswerSpy = jest.spyOn(wrapper.vm, "getAnswer");
         const input = wrapper.find("input");
         await input.setValue("?");
@@ -33,11 +39,11 @@ describe("Indecision component", () => {
         expect(getAnswerSpy).toHaveBeenCalled();
     })
 
-    test("pruebas en getAwswer ", () => {
-        // const spy = jest.spyOn(wrapper.vm, "getAnswer");
-        // wrapper.vm.getAnswer();
-        // expect(spy).toHaveBeenCalled();
-
+    test("pruebas en getAwswer ", async() => {
+        await wrapper.vm.getAnswer();
+        const img = wrapper.find("img");
+        expect(wrapper.vm.img).toBe('https://yesno.wtf/assets/yes/2.gif');
+        expect( wrapper.vm.answer).toBe('No!');
     })
 
 
